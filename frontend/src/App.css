@@ -1,16 +1,20 @@
+/* --- Global Variables for Dark Mode Palette --- */
 :root {
-    --color-bg-primary: #121212; 
-    --color-bg-secondary: #1e1e1e; 
-    --color-text-primary: #e0e0e0; 
-    --color-accent-blue: #00bcd4; 
+    --color-bg-primary: #121212; /* Deep background */
+    --color-bg-secondary: #1e1e1e; /* Card/Element background */
+    --color-text-primary: #e0e0e0; /* Main text color */
+    --color-accent-blue: #00bcd4; /* Cyan/Teal accent for buttons/title */
     --color-accent-hover: #4dc4d3; 
-    --color-low-inventory: #ffcc00; 
-    --color-reorder: #e57373; 
-    --color-ok: #a5d6a7; 
-    --color-border: #333333; 
+    --color-low-inventory: #ffcc00; /* Yellow for low inventory */
+    --color-reorder: #e57373; /* Light red for Reorder prediction */
+    --color-ok: #a5d6a7; /* Green for No Reorder prediction */
+    --color-border: #333333; /* Subtle borders */
     --color-shadow: rgba(0, 0, 0, 0.5);
+    --color-success-bg: #213c22; /* Dark green background for success message */
+    --color-success-text: var(--color-ok);
 }
 
+/* --- Base Body and Container Styles --- */
 body {
     background-color: var(--color-bg-primary);
     color: var(--color-text-primary);
@@ -44,6 +48,21 @@ body {
     font-weight: 700;
     color: var(--color-accent-blue);
     letter-spacing: 0.5px;
+}
+
+/* --- Section Title for Tables --- */
+.section-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin-top: 30px;
+    margin-bottom: 15px;
+    padding-left: 5px;
+    border-left: 4px solid var(--color-accent-blue);
+}
+
+.main-table-title {
+    margin-top: 40px; /* Extra space before the main list */
 }
 
 /* --- Buttons and Controls --- */
@@ -83,7 +102,7 @@ body {
     box-shadow: none;
 }
 
-/* --- Messages (Loading/Error) --- */
+/* --- Messages (Loading/Error/Success) --- */
 .loading-message, .error-message {
     text-align: center;
     padding: 40px 0;
@@ -96,6 +115,25 @@ body {
     color: var(--color-reorder); /* Use warning color for errors */
     font-weight: 600;
 }
+
+/* Card Message for ReorderTable (No Reorders Found) */
+.card-message {
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    background-color: var(--color-success-bg);
+    border: 1px solid var(--color-ok);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+
+.ok-message {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: var(--color-success-text);
+}
+
 
 /* --- Product Table Styling (Used by ProductTable.js) --- */
 .product-table {
@@ -153,6 +191,20 @@ body {
     color: var(--color-low-inventory);
     animation: pulse-low-inventory 1.5s infinite alternate;
 }
+
+/* Suggested Quantity in the Reorder Table */
+.suggested-quantity {
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--color-accent-blue);
+    padding: 5px 12px;
+    border-radius: 4px;
+    background-color: rgba(0, 188, 212, 0.1);
+}
+.suggest-col {
+    width: 150px; /* Fixed width for suggested quantity column */
+}
+
 
 /* Prediction Badges */
 .reorder-prediction, .no-reorder-prediction {

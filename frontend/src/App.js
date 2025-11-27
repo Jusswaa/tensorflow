@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useCallback } from "react";
 import ProductTable from "./components/ProductTable";
+import ReorderTable from "./components/ReorderTable";
 import { getProducts } from "./api";
 import { createReorderModel, predictReorder } from "./components/util/reorder";
 
@@ -76,7 +77,7 @@ export default function App() {
     <div className="dashboard-container">
       <div className="dashboard-header">
         <h2 className="dashboard-title">
-          AI Inventory Reorder Dashboard
+          AI Inventory Reorder Dashboard 🤖
         </h2>
         
         <div className="button-group">
@@ -111,7 +112,14 @@ export default function App() {
         </p>
       ) : (
         products.length > 0 ? (
-          <ProductTable products={products} />
+          <>
+            {/* 1. Reorder Suggestions Table (Actionable Items) */}
+            <ReorderTable products={products} />
+            
+            {/* 2. Main Inventory Table (Full List) */}
+            <h3 className="section-title main-table-title">Full Inventory List ({products.length} Items)</h3>
+            <ProductTable products={products} />
+          </>
         ) : (
           <p className="error-message">No product data available to display.</p>
         )
