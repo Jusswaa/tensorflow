@@ -1,28 +1,22 @@
 export async function getProducts() {
-
-  const API_URL = "https://jsonplaceholder.typicode.com/comments?_limit=100";
+  const API_URL = "http://localhost:8000/api/products";
   
   try {
     const res = await fetch(API_URL);
     if (!res.ok) {
-      throw new Error(`HTTP error! status: ${res.status}`);
+      throw new Error(`HTTP error! status: ${res.status} from ${API_URL}`);
     }
     const data = await res.json();
 
-    return data.map(comment => {
-      const idPart = comment.id;
-      const bodyLength = comment.body.length;
-      
-      return {
-        id: idPart,
-        name: comment.email.split('@')[0].toUpperCase(),
-        inventory: (idPart * 20) % 150 + 10, 
-        avgSales: Math.ceil(bodyLength / 40) + 5,
-        leadTime: (idPart % 19) + 3
-      };
-    });
+    return data.map(prod => ({
+      id: prod.id,
+      name: prod.name,
+      inventory: prod.currentInventory,
+      avgSales: prod.avgSalesPerWeek,
+      leadTime: prod.daysToReplenish
+    }));
   } catch (error) {
-    console.error("Failed to fetch products from the external API:", error);
+    console.error("Failed to fetch products. Check if the Laravel backend is running and the URL is correct:", error);
     return [];
   }
 }

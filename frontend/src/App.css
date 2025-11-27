@@ -1,133 +1,143 @@
-/* Global Reset and Typography */
+:root {
+    --color-bg-primary: #121212; 
+    --color-bg-secondary: #1e1e1e; 
+    --color-text-primary: #e0e0e0; 
+    --color-accent-blue: #00bcd4; 
+    --color-accent-hover: #4dc4d3; 
+    --color-low-inventory: #ffcc00; 
+    --color-reorder: #e57373; 
+    --color-ok: #a5d6a7; 
+    --color-border: #333333; 
+    --color-shadow: rgba(0, 0, 0, 0.5);
+}
+
 body {
+    background-color: var(--color-bg-primary);
+    color: var(--color-text-primary);
+    font-family: 'Inter', sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f4f7f9; 
-    font-family: 'Inter', sans-serif;
-    color: #333;
-    line-height: 1.6;
+    min-height: 100vh;
 }
-
-/* --- App.js Styles --- */
 
 .dashboard-container {
+    max-width: 1400px;
+    margin: 40px auto;
     padding: 20px;
-    max-width: 1000px;
-    margin: 30px auto;
-    background-color: #ffffff;
+    background-color: var(--color-bg-secondary);
     border-radius: 12px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 10px 25px var(--color-shadow);
 }
 
+/* --- Header and Title --- */
 .dashboard-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 2px solid #e5e7eb;
-    padding-bottom: 15px;
-    margin-bottom: 25px;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--color-border);
 }
 
 .dashboard-title {
-    font-size: 28px;
+    font-size: 1.8rem;
     font-weight: 700;
-    color: #1f2937;
-    margin: 0;
+    color: var(--color-accent-blue);
+    letter-spacing: 0.5px;
+}
+
+/* --- Buttons and Controls --- */
+.button-group {
+    display: flex;
+    gap: 10px;
 }
 
 .refresh-button {
     padding: 10px 20px;
-    background-color: #10b981; 
-    color: white;
-    font-weight: 600;
     border: none;
     border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
     cursor: pointer;
-    transition: background-color 0.2s ease, box-shadow 0.2s ease;
-    box-shadow: 0 4px 6px rgba(16, 185, 129, 0.2);
+    transition: background-color 0.3s ease, transform 0.1s ease, box-shadow 0.3s ease;
+    background-color: var(--color-accent-blue);
+    color: var(--color-bg-primary); /* Dark text on bright button */
+    box-shadow: 0 4px 8px rgba(0, 188, 212, 0.3); /* Accent shadow */
 }
 
-.refresh-button:hover:not(.disabled) {
-    background-color: #059669; 
-    box-shadow: 0 6px 8px rgba(16, 185, 129, 0.3);
+.refresh-button:hover:not(:disabled) {
+    background-color: var(--color-accent-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 188, 212, 0.4);
+}
+
+.refresh-button:active:not(:disabled) {
+    transform: translateY(0);
+    box-shadow: 0 4px 8px rgba(0, 188, 212, 0.3);
 }
 
 .refresh-button.disabled {
+    background-color: var(--color-border);
+    color: #888;
     cursor: not-allowed;
-    opacity: 0.6;
-    background-color: #9ca3af; 
     box-shadow: none;
 }
 
-.loading-message {
-    color: #6b7280;
-    font-style: italic;
+/* --- Messages (Loading/Error) --- */
+.loading-message, .error-message {
     text-align: center;
-    padding: 30px;
+    padding: 40px 0;
+    font-size: 1.1rem;
+    font-style: italic;
+    color: #9e9e9e;
 }
 
 .error-message {
-    color: #ef4444;
-    text-align: center;
-    padding: 30px;
+    color: var(--color-reorder); /* Use warning color for errors */
     font-weight: 600;
 }
 
-/* --- ProductTable.js Styles --- */
-
+/* --- Product Table Styling (Used by ProductTable.js) --- */
 .product-table {
     width: 100%;
     border-collapse: separate;
-    border-spacing: 0 10px;
+    border-spacing: 0;
+    font-size: 0.95rem;
+    border-radius: 8px;
+    overflow: hidden; /* Ensures borders are rounded */
+}
+
+.product-table th, .product-table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid var(--color-border);
 }
 
 .product-table th {
-    padding: 12px 16px;
-    text-align: left;
-    background: #eef2f6; 
-    color: #4b5563;
-    font-weight: 600;
+    background-color: var(--color-border);
+    color: var(--color-text-primary);
+    font-weight: 700;
     text-transform: uppercase;
-    font-size: 12px;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.5px;
+    position: sticky;
+    top: 0;
 }
 
-/* Rounded corners for the header row */
-.product-table thead tr {
-    border-radius: 8px;
-    overflow: hidden; 
-}
-.product-table th:first-child { border-radius: 8px 0 0 8px; }
-.product-table th:last-child { border-radius: 0 8px 8px 0; }
-
-.product-table td {
-    padding: 14px 16px;
-    background-color: #ffffff;
-    border: 1px solid #e5e7eb;
-    border-width: 0 1px;
+/* Alternating Row Colors for contrast */
+.product-table .row-odd {
+    background-color: var(--color-bg-secondary);
 }
 
-.product-table tr {
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-    transition: transform 0.2s, box-shadow 0.2s;
+.product-table .row-even {
+    background-color: #242424; /* Slightly darker shade */
 }
 
-.product-table tr:hover {
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    transform: translateY(-2px);
+.product-table tbody tr:hover {
+    background-color: #383838; /* Highlight row on hover */
+    transition: background-color 0.2s;
 }
 
-/* Alternating row colors, but still white background for the cell content */
-.product-table .row-odd td {
-    background-color: #f9fafb;
-}
-
-/* Rounded corners for the body rows */
-.product-table tr td:first-child { border-radius: 8px 0 0 8px; border-left-width: 1px; }
-.product-table tr td:last-child { border-radius: 0 8px 8px 0; border-right-width: 1px; }
-
-
-/* Text alignment utilities */
+/* Text Alignment Classes */
 .text-right {
     text-align: right;
 }
@@ -135,32 +145,41 @@ body {
     text-align: center;
 }
 
+/* --- Status Indicators --- */
 
-/* Inventory Status */
+/* Low Inventory Warning */
 .low-inventory {
-    color: #ef4444; 
     font-weight: 700;
+    color: var(--color-low-inventory);
+    animation: pulse-low-inventory 1.5s infinite alternate;
 }
 
-.ok-inventory {
-    color: #10b981; 
-    font-weight: 500;
-}
-
-/* Prediction Status */
-.reorder-prediction {
-    background: #fffbe0;
-    color: #b45309; 
-    font-weight: 700;
-    padding: 6px 10px;
-    border-radius: 6px;
+/* Prediction Badges */
+.reorder-prediction, .no-reorder-prediction {
     display: inline-block;
-    border: 1px solid #fcd34d;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
+}
+
+.reorder-prediction {
+    background-color: var(--color-reorder);
+    color: var(--color-bg-primary);
 }
 
 .no-reorder-prediction {
-    color: #059669; /* Dark green for clear status */
-    font-weight: 600;
-    padding: 6px 10px;
-    display: inline-block;
+    background-color: var(--color-ok);
+    color: var(--color-bg-primary);
+}
+
+/* --- Advanced CSS: Keyframe Animation --- */
+@keyframes pulse-low-inventory {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0.7;
+    }
 }

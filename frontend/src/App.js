@@ -6,6 +6,7 @@ import { createReorderModel, predictReorder } from "./components/util/reorder";
 export default function App() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isTraining, setIsTraining] = useState(false);
   
   const [reorderModel, setReorderModel] = useState(null);
 
@@ -33,55 +34,80 @@ export default function App() {
     } finally {
       setLoading(false);
     }
-  }, [reorderModel]); 
+  }, [reorderModel]);
 
-  useEffect(() => {
-    async function trainModel() {
-      try {
-        setLoading(true);
-        const model = await createReorderModel();
-        setReorderModel(model);
-      } catch (err) {
-        console.error("Error training model:", err);
-        setLoading(false);
-      }
+  const handleTrainModel = useCallback(async () => {
+    try {
+      setIsTraining(true);
+      console.log("Starting model training...");
+      // This function calls TensorFlow.js to train the neural network
+      const model = await createReorderModel();
+      setReorderModel(model);
+      console.log("Model training complete.");
+    } catch (err) {
+      console.error("Error training model:", err);
+    } finally {
+      setIsTraining(false);
     }
-    trainModel();
   }, []);
 
+  // 1. Initial Model Training (runs only once on mount)
   useEffect(() => {
-    if (reorderModel) {
+    handleTrainModel();
+  }, [handleTrainModel]);
+
+  // 2. Data fetch when the model is ready (initially or after retraining)
+  useEffect(() => {
+    // Only fetch data and predict if the model is ready AND we are not currently training.
+    if (reorderModel && !isTraining) {
       fetchDataAndPredict();
     }
-  }, [reorderModel, fetchDataAndPredict]);
+  }, [reorderModel, isTraining, fetchDataAndPredict]);
 
-
-  const handleRefresh = () => {
+  const handleRunPredictions = () => {
     fetchDataAndPredict();
   };
-
-  const buttonClass = `refresh-button ${loading || !reorderModel ? 'disabled' : ''}`;
+  
+  const isButtonDisabled = loading || isTraining || !reorderModel;
+  const trainButtonClass = `refresh-button ${isTraining || loading ? 'disabled' : ''}`;
+  const runButtonClass = `refresh-button ${isButtonDisabled ? 'disabled' : ''}`;
 
   return (
     <div className="dashboard-container">
       <div className="dashboard-header">
         <h2 className="dashboard-title">
-           Inventory Reorder Dashboard 
+          AI Inventory Reorder Dashboard
         </h2>
         
-        <button
-          onClick={handleRefresh}
-          disabled={loading || !reorderModel}
-          className={buttonClass}
-          title="Reload products from API and re-calculate predictions"
-        >
-          {loading ? 'Refreshing...' : 'Refresh Data'}
-        </button>
+        <div className="button-group">
+          
+          <button
+            onClick={handleTrainModel}
+            disabled={isTraining || loading}
+            className={trainButtonClass}
+            title="Retrain the TensorFlow.js model using the synthetic dataset."
+          >
+            {isTraining ? 'Training AI...' : 'Train Model'}
+          </button>
+
+          <button
+            onClick={handleRunPredictions}
+            disabled={isButtonDisabled}
+            className={runButtonClass}
+            title="Fetch latest inventory data from Laravel and run AI predictions"
+          >
+            {loading ? 'Running...' : 'Run Predictions'}
+          </button>
+        </div>
       </div>
 
-      {loading ? (
+      {isTraining ? (
         <p className="loading-message">
-          {reorderModel ? 'Fetching latest data and running predictions...' : 'Training AI model... Please wait.'}
+          Training AI model... This only happens once on startup or when manually triggered.
+        </p>
+      ) : loading ? (
+        <p className="loading-message">
+          Fetching data and calculating predictions...
         </p>
       ) : (
         products.length > 0 ? (
