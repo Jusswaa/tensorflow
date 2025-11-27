@@ -1,17 +1,10 @@
 import * as tf from "@tensorflow/tfjs";
 
-// A larger, more realistic training set helps the model generalize better.
-// The prediction target (Y) is based on a Safety Stock calculation:
-// Reorder (1) if Inventory is less than 2x the sales required during Lead Time.
-// Input features (X): [ Inventory, Avg Weekly Sales, Lead Time (Days) ]
-// Output target (Y): [ Reorder (1) or No Reorder (0) ]
-
 export async function createReorderModel() {
   const trainingX = tf.tensor2d([
-    // [I, Sales, LeadTime] -> Reorder? (1=Yes, 0=No)
 
     // CLEAR REORDER CASES (Low Stock, High Demand/Long Lead Time)
-    [10, 30, 7], // Low inventory for high sales/lead time
+    [10, 30, 7], 
     [5, 50, 14],
     [15, 60, 5],
     [1, 10, 21],
@@ -24,7 +17,7 @@ export async function createReorderModel() {
     [25, 20, 14],
 
     // CLEAR NO REORDER CASES (High Stock, Low Demand/Short Lead Time)
-    [150, 10, 3], // High inventory for low sales/lead time
+    [150, 10, 3], 
     [80, 5, 7],
     [100, 25, 3],
     [65, 15, 10],
@@ -58,11 +51,11 @@ export async function createReorderModel() {
 
   const model = tf.sequential();
   model.add(tf.layers.dense({ inputShape: [3], units: 16, activation: "relu" }));
-  model.add(tf.layers.dense({ units: 8, activation: "relu" })); // Added an extra layer
+  model.add(tf.layers.dense({ units: 8, activation: "relu" })); 
   model.add(tf.layers.dense({ units: 1, activation: "sigmoid" }));
 
   model.compile({
-    optimizer: tf.train.adam(0.01), // Used a lower learning rate for better convergence
+    optimizer: tf.train.adam(0.01), 
     loss: "binaryCrossentropy",
     metrics: ["accuracy"],
   });
