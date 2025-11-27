@@ -18,7 +18,7 @@ export default function ReorderTable({ products }) {
   return (
     <div className="reorder-section">
       <h3 className="section-title">
-        AI Reorder Suggestions ({reorderSuggestions.length} Items)
+        Reorder Suggestions ({reorderSuggestions.length} Items)
       </h3>
       
       {/* Reusing ProductTable structure but limiting columns for suggestion view */}

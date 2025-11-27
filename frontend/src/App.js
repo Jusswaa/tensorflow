@@ -77,7 +77,7 @@ export default function App() {
     <div className="dashboard-container">
       <div className="dashboard-header">
         <h2 className="dashboard-title">
-          AI Inventory Reorder Dashboard 🤖
+          Inventory Reorder Dashboard 
         </h2>
         
         <div className="button-group">
